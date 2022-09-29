@@ -67,5 +67,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String foreign_txt = foreign_txtEdit.getText().toString();
+                Boolean checkdeletedata = dbHelper.deleteUserData(foreign_txt);
+                if (checkdeletedata == true)
+                    Toast.makeText(MainActivity.this, "Dictionary deleted", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "Failed to delete dictionary", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String foreign_txt = foreign_txtEdit.getText().toString();
+                String english_trans = english_tranEdit.getText().toString();
+                String comment_txt = commentEdit.getText().toString();
+                String lang_txt = language_txtEdit.getText().toString();
+                Boolean checkupdatedata = dbHelper.updateUserData(foreign_txt, english_trans, comment_txt, lang_txt);
+                if (checkupdatedata == true)
+                    Toast.makeText(MainActivity.this, "Dictionary Updated", Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(MainActivity.this, "Update Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

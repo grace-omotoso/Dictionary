@@ -15,6 +15,7 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        //sqLiteDatabase.execSQL("drop table dictionary");
         sqLiteDatabase.execSQL("create table dictionary (foreign_txt text, english_translation text, comment_txt text, language_txt text)");
     }
 
@@ -40,6 +41,32 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
          }
      }
 
+    public Boolean updateUserData(String foreign_text, String english_translation, String comment_text, String language_text){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("foreign_txt", foreign_text);
+        contentValues.put("english_translation", english_translation);
+        contentValues.put("comment_txt", comment_text);
+        contentValues.put("language_txt", language_text);
+        long result = sqLiteDatabase.update("dictionary",contentValues, "foreign_txt=?", new String[]{foreign_text});
+        if (result == -1){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+     public Boolean deleteUserData(String foreign_txt){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from dictionary where foreign_txt = ?", new String[]{foreign_txt});
+        if (cursor.getCount() > 0) {
+            long result = sqLiteDatabase.delete("dictionary", "foreign_txt=?", new String[]{foreign_txt});
+            return result != -1;
+        }
+        else{
+            return false;
+        }
+     }
      public Cursor getUserData(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("select * from dictionary",null);
